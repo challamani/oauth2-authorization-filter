@@ -1,0 +1,39 @@
+[
+  {
+    "resourceId": ".*\/employees\/*",
+    "methods": [
+      "GET",
+      "DELETE",
+      "POST",
+      "PUT"
+    ],
+    "scopes": [
+      "hr-senior-member",
+      "hr-lead",
+      "admin",
+      "onboarding-lead"
+    ]
+  },
+  {
+    "resourceId": ".*\/employees\/*",
+    "methods": [
+      "GET"
+    ],
+    "scopes": [
+      "tech-lead",
+      "developer"
+    ]
+  },
+  {
+    "resourceId": ".*\/todos\/*",
+    "methods": [
+      "GET",
+      "DELETE",
+      "POST",
+      "PUT"
+    ],
+    "scopes": [
+      "*"
+    ]
+  }
+]
