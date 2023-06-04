@@ -3,16 +3,16 @@
 the json file should contain the resource and scope mapping</p>
 
 
-### Start the token issuer
+### Start the token authorization server (KEYCLOAK) 
 ```shell
 docker run -d -p 8080:8080 -e KEYCLOAK_ADMIN=admin \
   -e KEYCLOAK_ADMIN_PASSWORD=changeme \
   quay.io/keycloak/keycloak:19.0.3 start-dev
 ```
 
-### Access the KEYCLOAK admin page http://localhost:8080
+#### Access the KEYCLOAK admin page http://localhost:8080
 
-### Create the realm, client for client credentials grant and specific scopes to client
+#### Create the realm, client for client credentials grant and specific scopes to client
 1. First lets create a new realm, click the `master` dropdown can select `Create Realm`
 2. Enter the Realm name `oauth2-workshop` and select `Create`
 
@@ -54,4 +54,23 @@ curl -v -X DELETE  http://localhost:9090/test-authz-filter/employees/4 --header 
 
 ### This should work with all active tokens
 curl -v http://localhost:9090/test-authz-filter/todos --header "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+#### An example scope and resource binding
+```shell
+{
+    "resourceId": ".*\/employees\/*",
+    "methods": [
+      "GET",
+      "DELETE",
+      "POST",
+      "PUT"
+    ],
+    "scopes": [
+      "hr-senior-member",
+      "hr-lead",
+      "admin",
+      "onboarding-lead"
+    ]
+  }
 ```
