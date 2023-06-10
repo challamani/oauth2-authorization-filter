@@ -12,7 +12,7 @@ docker run -d -p 8080:8080 -e KEYCLOAK_ADMIN=admin \
 
 #### Access the KEYCLOAK admin page http://localhost:8080
 
-#### Create the realm, client for client credentials grant and specific scopes to client
+#### Create the realm, and client for client credentials grant with specific scopes to the client
 1. First lets create a new realm, click the `master` dropdown can select `Create Realm`
 2. Enter the Realm name `oauth2-workshop` and select `Create`
 
@@ -56,7 +56,7 @@ curl -v -X DELETE  http://localhost:9090/test-authz-filter/employees/4 --header 
 curl -v http://localhost:9090/test-authz-filter/todos --header "Authorization: Bearer $ACCESS_TOKEN"
 ```
 
-#### An example scope and resource binding
+#### An example of scope and resource binding
 ```shell
 {
     "resourceId": ".*\/employees\/*",
