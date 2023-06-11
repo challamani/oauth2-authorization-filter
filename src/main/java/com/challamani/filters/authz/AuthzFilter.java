@@ -33,6 +33,7 @@ import java.util.regex.Pattern;
 public class AuthzFilter implements Filter {
 
     private final List<ScopeResourceMap> scopeResourceMapList;
+
     @Autowired
     private AuthzFilter(ResourceLoader resourceLoader) throws IOException {
         byte[] bytes = resourceLoader.getResource("classpath:scopes-bindings.json")
@@ -89,6 +90,10 @@ public class AuthzFilter implements Filter {
                 .anyMatch(scopeResourceMap ->
                         scopeResourceMap.getScopes().stream().anyMatch(scope -> scopes.contains(scope))
                         || scopeResourceMap.getScopes().contains("*"));
-        return anyMatch;
+
+        if(!anyMatch){
+            return UnprotectedWebMethodConfig.unprotectedEndpoints.contains(resourceUri);
+        }
+        return true;
     }
 }
