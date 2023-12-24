@@ -1,6 +1,6 @@
-# Oauth2-authz-filter
-<p> Protecting the Restful resources by enabling the authorization checks, works based on external json file.
-the json file should contain the resource and scope mapping</p>
+# Oauth2-authorization-filter
+<p> Protecting the Restful resources by enabling the authorization checks, works based on an external JSON file.
+The JSON file should contain the resource and scope mapping</p>
 
 
 ### Start the token authorization server (KEYCLOAK) 
@@ -12,8 +12,8 @@ docker run -d -p 8080:8080 -e KEYCLOAK_ADMIN=admin \
 
 #### Access the KEYCLOAK admin page http://localhost:8080
 
-#### Create the realm, and client for client credentials grant with specific scopes to the client
-1. First lets create a new realm, click the `master` dropdown can select `Create Realm`
+#### Create the realm, and client-for-client credentials grant with specific scopes to the client
+1. First let us create a new realm, click the `master` dropdown and select `Create Realm`
 2. Enter the Realm name `oauth2-workshop` and select `Create`
 
 Once the realm is created it creates an endpoint that describes what functionality exists from the provider.
@@ -30,7 +30,7 @@ You should see the following endpoints:
 4. Select `Save`
 
 ### Generate the access token
-#### Copy the client# and secret from client credentials session
+#### Copy the client# and secret from the client credentials session
 ```shell
 CLIENT_ID=ClientCredentialsApp
 CLIENT_SECRET=mo78isv40IQhW970aXSyKI7QS840wlDe
@@ -45,15 +45,23 @@ curl --location -X POST 'http://localhost:8080/realms/oauth2-workshop/protocol/o
 --data-urlencode 'scope=email hr-lead developer'
 ```
 
-Generate the token with different scopes and try access the endpoints with valid and invalid token (token with different scope)
+Generate the tokens with different scopes and try to access the endpoints with valid and invalid tokens.
+
 ```shell
-curl -v  http://localhost:9090/test-authz-filter/employees --header "Authorization: Bearer $ACCESS_TOKEN"
+curl --header "Authorization: Bearer $ACCESS_TOKEN" \
+  http://localhost:9090/test-authz-filter/employees
+```
 
-### Below curl shouldn't work with the token that doesn't contain claim-scopes which can delete employee
-curl -v -X DELETE  http://localhost:9090/test-authz-filter/employees/4 --header "Authorization: Bearer $ACCESS_TOKEN"
+```shell
+### Below curl shouldn't work with the bearer token that doesn't contain scopes that can delete an employee entity
+curl --header "Authorization: Bearer $ACCESS_TOKEN" \
+  -X DELETE  http://localhost:9090/test-authz-filter/employees/4
+```
 
-### This should work with all active tokens
-curl -v http://localhost:9090/test-authz-filter/todos --header "Authorization: Bearer $ACCESS_TOKEN"
+```shell
+### This should work with all active bearer tokens
+curl --header "Authorization: Bearer $ACCESS_TOKEN" \
+  http://localhost:9090/test-authz-filter/todos
 ```
 
 #### An example of scope and resource binding
@@ -67,8 +75,7 @@ curl -v http://localhost:9090/test-authz-filter/todos --header "Authorization: B
       "PUT"
     ],
     "scopes": [
-      "hr-senior-member",
-      "hr-lead",
+      "hr-senior-associate",
       "admin",
       "onboarding-lead"
     ]
